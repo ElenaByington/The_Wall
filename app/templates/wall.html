@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">    
+    <title>Welcome</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col">
+                <h2>CodingDojo Wall</h2>
+            </div>
+            <div class="col text-center">
+                <h3>Welcome, {{ user.first_name }}!</h3>
+            </div>
+            <div class="col text-right">
+                <a href="/logout">Log Out</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="col py-3 px-lg-5 border bg-light">
+            <div class="row">
+
+                <div class="col">
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                            <li {% if message.tags %} class="{{ message.tags }} text-danger"{% endif %}>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+<!-- MESSAGE FORM -->
+                    <div class="form-group">
+                        <form action="/post_message" method="POST">
+                            {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Post a message</label>
+                                    <textarea class="form-control" name="postmessage"></textarea>
+                                </div>
+                                    <button class="btn btn-primary btn-sm float-right">Post a message</button>
+                        </form>
+                    </div>
+<!-- POSTED MESSAGE -->
+                    <div class="form-group">
+                        <div class="posted_message">
+                            {% for postmessage in postmessages %}
+                            <h5>{{ postmessage.user_message.first_name }} {{ postmessage.user_message.last_name }} - {{ postmessage.created_at }}</h5>
+                            <p>{{ postmessage.posted_message }}</p>
+                            <p></p>
+                                {% if postmessage.user_message.id == request.session.user_id %}
+                                <form action="/wall/{{postmessage.id}}/deletemsg">
+                                    {% csrf_token %}
+                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                                {% endif %}
+                            <p></p>
+<!-- POSTED COMMENT -->
+                            <div class="posted_comment">
+                                {% for comment in postmessage.message_comments.all %}
+                                <h6>{{ comment.user_comment.first_name }} {{ comment.user_comment.last_name }} - {{ comment.created_at }}</h6>
+                                <p>{{ comment.posted_comment }}</p>
+                                <p></p>
+                                <!-- <i onclick="myFunction(this)" class="fa fa-thumbs-up"></i>
+                                <script>function myFunction(x) {x.classList.toggle("fa-thumbs-down");}</script> -->
+                                    {% if comment.user_comment.id == request.session.user_id %}
+                                    <form action="/wall/{{comment.id}}/delete">
+                                        {% csrf_token %}
+                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                    {% endif %}
+                                <p></p>
+                                {% endfor %}
+                            </div>
+                        </div>
+<!-- COMMENT FORM -->
+                        <div>
+                            <form action="/comment/{{postmessage.id}}" method="POST" class="comment">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Post a comment</label>
+                                    <textarea class="form-control" name="comment"></textarea>
+                                    <input type="hidden" name="user_id" value="{{user.id}}">
+                                    <input type="hidden" name="message_id" value="{{message.id}}">
+                                </div>
+                                <button class="btn btn-success btn-sm float-right">Post a comment</button>
+                                <P></P>
+                            </form>
+                        {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>

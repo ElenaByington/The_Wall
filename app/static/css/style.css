@@ -1,0 +1,22 @@
+.posted_message {
+    margin-top: 50px;
+}
+
+.comment {
+    margin-bottom: 50px;
+    margin-left: 50px;
+}
+
+.posted_comment {
+    margin-left: 50px;
+}
+
+.fa {
+    font-size: 25px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.fa:hover {
+    color: darkblue;
+}
