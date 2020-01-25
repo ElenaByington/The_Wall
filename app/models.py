@@ -9,9 +9,9 @@ class UserManager(models.Manager):
         errors = {}
         print(dataPost)
         if len(dataPost['first_name']) < 2:
-            errors['first_name'] = "First name must have 2 and more characters."
+            errors['first_name'] = "First name must have 2 or more characters."
         if len(dataPost['last_name']) < 2:
-            errors['last_name'] = "Last name must have 2 and more characters."
+            errors['last_name'] = "Last name must have 2 or more characters."
         # if dataPost['bday']=="":
         #     errors['bday']="Birthday cannot be empty"
         # else:
