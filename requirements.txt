@@ -4,7 +4,7 @@ bcrypt==3.1.7
 cffi==1.13.2
 Click==7.0
 colorama==0.4.3
-Django==2.2
+Django==2.2.24
 Flask==1.1.1
 isort==4.3.21
 itsdangerous==1.1.0
